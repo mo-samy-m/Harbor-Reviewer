@@ -1,0 +1,355 @@
+# Harbor Tasks Verification Prompt Templates
+# Following the proven structure from sr-code-swe-internal Step 3
+
+templates:
+  # Prompt Quality (4 criteria)
+  prompt_is_clear_and_unambiguous:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess prompt clarity and unambiguity. CRITICAL: Only mark 'fail' if ambiguity or lack of clarity DIRECTLY IMPACTED the agent's ability to execute the task successfully. Minor ambiguities that didn't affect execution should be marked 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how the ambiguity directly caused execution failure. If you mark 'pass', your justification MUST explain what's good. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the prompt is clear, well-phrased, and unambiguous. Mark 'pass' if the prompt clearly states what needs to be done without confusion, OR if any ambiguity did not directly impact execution. Mark 'fail' ONLY if the prompt's vagueness or ambiguity directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  prompt_defines_all_success_criteria:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether the prompt explicitly defines all success criteria that will be tested. CRITICAL: Only mark 'fail' if missing success criteria DIRECTLY IMPACTED the agent's ability to execute the task successfully. If missing criteria didn't affect execution, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how missing criteria directly caused execution failure. If you mark 'pass', your justification MUST explain that all criteria are defined or missing ones didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the prompt explicitly covers all success criteria that are being tested. Mark 'pass' if the prompt clearly defines what success looks like, OR if missing criteria didn't directly impact execution. Mark 'fail' ONLY if omitted success criteria directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  prompt_has_no_solution_leakage:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether the prompt avoids leaking specific commands, implementation details, or solution approaches. CRITICAL: Only mark 'fail' if solution leakage DIRECTLY HELPED the agent bypass the intended challenge or cheat the solution. Minor hints that didn't enable cheating should be marked 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how the leakage directly enabled cheating or bypassing. If you mark 'pass', your justification MUST explain that the prompt describes what to do, not how, or that leakage didn't impact fairness. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the prompt avoids giving away the solution. Mark 'pass' if the prompt describes what to do without specifying how, OR if any hints didn't directly enable cheating. Mark 'fail' ONLY if the prompt's leakage directly helped the agent bypass the challenge or cheat."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  prompt_does_not_require_runtime_internet:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether the prompt requires internet access at runtime to solve the task. CRITICAL: Only mark 'fail' if the internet requirement DIRECTLY IMPACTED the agent's ability to execute the task successfully. If internet was mentioned but not actually needed for execution, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how the internet requirement directly caused execution failure. If you mark 'pass', your justification MUST explain that the task is solvable offline or internet wasn't needed. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the task can be solved without internet access at runtime. Mark 'pass' if the task is fully solvable offline, OR if internet requirement didn't directly impact execution. Mark 'fail' ONLY if the prompt's internet requirement directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  # Prompt-Tests Alignment (3 criteria)
+  tests_cover_all_prompt_requirements:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether the tests verify all success criteria defined in the prompt. CRITICAL: Only mark 'fail' if untested prompt requirements DIRECTLY IMPACTED the agent's ability to demonstrate success, leading to failure. If missing test coverage didn't affect execution outcome, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how missing test coverage directly caused execution failure. If you mark 'pass', your justification MUST explain that all requirements are covered or missing coverage didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the tests cover all success criteria mentioned in the prompt. Mark 'pass' if every requirement in the prompt has corresponding test coverage, OR if missing coverage didn't directly impact execution. Mark 'fail' ONLY if untested prompt requirements directly caused the agent to fail."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  tests_do_not_add_hidden_requirements:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether the tests add requirements not stated in the prompt. CRITICAL: Only mark 'fail' if hidden requirements DIRECTLY IMPACTED the agent's ability to execute the task successfully, causing failure. Minor hidden requirements that didn't affect execution should be marked 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how hidden requirements directly caused execution failure. If you mark 'pass', your justification MUST explain that tests only validate stated requirements or hidden ones didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the tests check for things not mentioned in the prompt. Mark 'pass' if tests only validate what the prompt explicitly requires, OR if hidden requirements didn't directly impact execution. Mark 'fail' ONLY if hidden requirements directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  tests_validate_only_explicit_success_criteria:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether the tests are scoped only to the explicit success criteria stated in the prompt. CRITICAL: Only mark 'fail' if out-of-scope validations DIRECTLY IMPACTED the agent's ability to execute the task successfully, causing failure. Tests checking additional things that didn't affect execution should be marked 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how out-of-scope validations directly caused execution failure. If you mark 'pass', your justification MUST explain that tests are properly scoped or out-of-scope checks didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the tests validate only what the prompt explicitly requires. Mark 'pass' if tests focus solely on stated success criteria, OR if out-of-scope validations didn't directly impact execution. Mark 'fail' ONLY if out-of-scope validations directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  # Test Quality & Robustness (5 criteria)
+  tests_validate_final_state_not_method:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether tests validate outcomes rather than implementation methods. CRITICAL: Only mark 'fail' if method-specific checks DIRECTLY IMPACTED the agent's ability to execute the task successfully, causing failure. Tests that check methods but still allow valid solutions should be marked 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how method checks directly caused execution failure. If you mark 'pass', your justification MUST explain that tests check final state/outcomes or method checks didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if tests check the final result rather than how it was achieved. Mark 'pass' if tests validate outcomes (files exist, content is correct, etc.), OR if method checks didn't directly impact execution. Mark 'fail' ONLY if method-specific checks directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  tests_verify_real_correctness_not_superficial_checks:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether tests verify meaningful correctness rather than superficial conditions. CRITICAL: Only mark 'fail' if superficial checks DIRECTLY IMPACTED the agent's ability to demonstrate correct execution, allowing incorrect solutions to pass. If superficial checks still catch real failures, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how superficial checks directly enabled incorrect solutions to pass. If you mark 'pass', your justification MUST explain that tests verify real functionality or superficial checks didn't impact correctness. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if tests verify actual correctness, not just existence or non-zero values. Mark 'pass' if tests check content, relationships, and proper behavior, OR if superficial checks still catch real failures. Mark 'fail' ONLY if superficial checks directly allowed incorrect solutions to pass."
+    context_format: |
+      Task Name: {task_name}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  tests_use_stable_ground_truth:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether expected values come from stable, controlled test files rather than files the agent can modify. CRITICAL: Only mark 'fail' if mutable ground truth DIRECTLY IMPACTED the agent's ability to execute the task successfully, causing failure or enabling cheating. If mutable ground truth didn't affect execution, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how mutable ground truth directly caused execution failure or enabled cheating. If you mark 'pass', your justification MUST explain that ground truth is in test files or mutability didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if expected values come from safe test files, not files the agent can modify. Mark 'pass' if ground truth is in the tests/ directory, OR if mutable ground truth didn't directly impact execution. Mark 'fail' ONLY if mutable ground truth directly caused the agent to fail or enabled cheating."
+    context_format: |
+      Task Name: {task_name}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  tests_are_not_easily_bypassable:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether tests are robust against shortcuts, hardcoding, or trivial solutions. CRITICAL: Only mark 'fail' if bypassability DIRECTLY IMPACTED the agent's ability to demonstrate proper execution, allowing trivial solutions to pass. If tests can be bypassed but the agent still had to solve the real problem, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how bypassability directly enabled trivial solutions to pass. If you mark 'pass', your justification MUST explain that tests require proper implementation or bypasses didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if tests can be bypassed with shortcuts or hardcoded outputs. Mark 'pass' if tests require solving the actual problem, OR if bypasses didn't directly impact execution. Mark 'fail' ONLY if bypassability directly allowed trivial solutions to pass."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  tests_are_well_scoped_and_non_redundant:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether tests are concise and free of redundancy. CRITICAL: Only mark 'fail' if redundancy or poor scoping DIRECTLY IMPACTED the agent's ability to execute the task successfully, causing failure. Minor redundancy that didn't affect execution should be marked 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how redundancy or poor scoping directly caused execution failure. If you mark 'pass', your justification MUST explain that tests are well-organized or redundancy didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if tests are well-organized without redundant checks. Mark 'pass' if tests are concise and each test has a clear purpose, OR if redundancy didn't directly impact execution. Mark 'fail' ONLY if redundancy or poor scoping directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  # Environment & Dependencies (3 criteria)
+  dependencies_are_pinned:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether all dependencies are pinned to specific versions. CRITICAL: Only mark 'fail' if unpinned dependencies DIRECTLY IMPACTED the agent's ability to execute the task successfully, causing failure due to version incompatibilities. If unpinned dependencies didn't cause execution issues, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how unpinned dependencies directly caused execution failure. If you mark 'pass', your justification MUST explain that all dependencies have versions or unpinned ones didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if all dependencies specify exact versions. Mark 'pass' if all package installations use version pins, OR if unpinned dependencies didn't directly impact execution. Mark 'fail' ONLY if unpinned dependencies directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Dockerfile:
+      {dockerfile}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  dependencies_cover_all_prompt_requirements:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether all dependencies required to run the golden solution are present in the Dockerfile. CRITICAL: Only mark 'fail' if missing dependencies DIRECTLY IMPACTED the agent's ability to execute the task successfully, causing failure. If missing dependencies didn't cause execution issues, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how missing dependencies directly caused execution failure. If you mark 'pass', your justification MUST explain that all required dependencies are present or missing ones didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the Dockerfile includes all dependencies needed to run the solution. Mark 'pass' if all required packages/tools are installed, OR if missing dependencies didn't directly impact execution. Mark 'fail' ONLY if missing dependencies directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+      Dockerfile:
+      {dockerfile}
+      Solution:
+      {solution}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  mock_data_cover_all_cases_to_be_tested:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether mock data covers all test cases needed to validate the prompt requirements. CRITICAL: Only mark 'fail' if missing or incomplete mock data DIRECTLY IMPACTED the agent's ability to execute the task successfully, causing failure. If missing mock data didn't affect execution, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how missing mock data directly caused execution failure. If you mark 'pass', your justification MUST explain that all cases are covered or missing data didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if mock/test data is sufficient to test all success criteria. Mark 'pass' if all test cases have appropriate mock data, OR if missing data didn't directly impact execution. Mark 'fail' ONLY if missing or incomplete mock data directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+      Test File:
+      {tests}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  # Solution (2 criteria)
+  solution_does_not_depend_on_runtime_internet:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether the golden solution runs without needing internet access. CRITICAL: Only mark 'fail' if internet dependency DIRECTLY IMPACTED the agent's ability to execute the task successfully, causing failure. If internet was used but didn't cause execution issues, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how internet dependency directly caused execution failure. If you mark 'pass', your justification MUST explain that the solution is offline or internet didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the solution script can run without internet. Mark 'pass' if the solution works offline, OR if internet dependency didn't directly impact execution. Mark 'fail' ONLY if internet dependency directly caused the agent to fail the task."
+    context_format: |
+      Task Name: {task_name}
+      Solution:
+      {solution}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  solution_passes_all_tests:
+    system_instruction: "You are an expert QA engineer evaluating terminal-bench tasks. You assess whether the golden solution passes all tests based on oracle execution logs. CRITICAL: Only mark 'fail' if test failures DIRECTLY IMPACTED the agent's ability to execute the task successfully, indicating a broken task. If tests passed or failures were non-critical, mark 'pass'. Your result MUST match your justification. If you mark 'fail', your justification MUST explain how test failures directly indicate a broken task. If you mark 'pass', your justification MUST explain that all tests passed or failures didn't impact execution. Justification must be no more than 2 sentences."
+    task_description: "Evaluate if the solution passes all tests according to oracle logs. Mark 'pass' if oracle stdout shows all tests passed, OR if test failures didn't directly indicate a broken task. Mark 'fail' ONLY if oracle stderr shows test failures that directly indicate the task is broken."
+    context_format: |
+      Task Name: {task_name}
+      Oracle stdout:
+      {oracle_stdout}
+      Oracle stderr:
+      {oracle_stderr}
+    response_format: |
+      ```json
+      {
+        "result": "<pass or fail>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  # Root Cause Analysis (2 prompts)
+  root_cause_category:
+    system_instruction: "You are an expert QA engineer analyzing why an agent failed to complete a terminal-bench task. You categorize the root cause based on the agent trajectory, prompt, tests, and execution logs. CRITICAL: Your result MUST match your justification. Choose the most appropriate category. Justification must be no more than 2 sentences."
+    task_description: "Categorize the root cause of agent failure. Choose one: 'Prompt-test mismatch', 'Incomplete prompt', 'Incorrect or over-scoped tests', 'Environment/dependency issue', 'Anti-cheat weakness', 'Fair model failure', or 'Other'."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+      Test File:
+      {tests}
+      Agent stdout:
+      {agent_stdout}
+      Agent stderr:
+      {agent_stderr}
+      Agent Trajectory Summary:
+      {trajectory_summary}
+    response_format: |
+      ```json
+      {
+        "result": "<category name>",
+        "justification": "<1-2 sentences>"
+      }
+      ```
+
+  root_cause_summary:
+    system_instruction: "You are an expert QA engineer analyzing why an agent failed to complete a terminal-bench task. You provide a concise summary explaining what happened and why. CRITICAL: Your summary MUST be 2-4 sentences and grounded in evidence from the trajectory, prompt, tests, and logs. The 'result' field MUST contain the summary text. The 'justification' field is optional."
+    task_description: "Provide a 2-4 sentence summary explaining why the agent failed, what it tried, and why it didn't succeed. Use evidence from the trajectory, logs, prompt, and tests."
+    context_format: |
+      Task Name: {task_name}
+      Prompt/Instruction:
+      {instruction}
+      Test File:
+      {tests}
+      Agent stdout:
+      {agent_stdout}
+      Agent stderr:
+      {agent_stderr}
+      Agent Trajectory Summary:
+      {trajectory_summary}
+    response_format: |
+      ```json
+      {
+        "result": "<2-4 sentence summary text here>",
+        "justification": "<optional - can be empty string or same as result>"
+      }
+      ```
+
+  manual_review_notes:
+    system_instruction: "You are an expert QA engineer summarizing manual review findings. CRITICAL: Only generate notes if there are ANY failures in the evaluation criteria (excluding solution-related fields). If all criteria passed, return an empty string. Your notes MUST summarize the failures and explain how each failure directly impacted the agent's ability to execute the task successfully. Be concise but comprehensive."
+    task_description: "Generate free-text notes summarizing any failures in the evaluation criteria (excluding solution-related fields: solution_does_not_depend_on_runtime_internet, solution_passes_all_tests). If there are no failures, return an empty string. For each failure, explain what failed and how it directly impacted execution."
+    context_format: |
+      Task Name: {task_name}
+    response_format: |
+      ```json
+      {
+        "result": "<free text notes summarizing failures and their impact on execution, or empty string if no failures>",
+        "justification": "<optional - can be empty string>"
+      }
+      ```
+
+  manual_review_notes_all:
+    system_instruction: "You are an expert QA engineer summarizing manual review findings. CRITICAL: Only generate notes if there are ANY failures in the evaluation criteria (including all fields). If all criteria passed, return an empty string. Your notes MUST summarize the failures and explain how each failure directly impacted the agent's ability to execute the task successfully. Be concise but comprehensive."
+    task_description: "Generate free-text notes summarizing any failures in ALL evaluation criteria (including solution-related fields). If there are no failures, return an empty string. For each failure, explain what failed and how it directly impacted execution."
+    context_format: |
+      Task Name: {task_name}
+    response_format: |
+      ```json
+      {
+        "result": "<free text notes summarizing failures and their impact on execution, or empty string if no failures>",
+        "justification": "<optional - can be empty string>"
+      }
+      ```
+

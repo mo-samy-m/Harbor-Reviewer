@@ -1,0 +1,359 @@
+metadata:
+  version: '1.0'
+  description: Harbor Tasks verification criteria
+  total_criteria: 21
+criteria:
+  prompt_is_clear_and_unambiguous:
+    category: prompt_quality
+    description: Is the prompt well-phrased and understandable?
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null Evaluate if the prompt is clear, well-phrased, and unambiguous.
+    rubric:
+    - score: 1
+      label: Pass
+      description: The prompt clearly states what needs to be done without confusion
+        or multiple interpretations.
+      examples: []
+    - score: 0
+      label: Fail
+      description: The prompt is vague, confusing, or could be interpreted multiple
+        ways.
+      examples: []
+  prompt_defines_all_success_criteria:
+    category: prompt_quality
+    description: Does the prompt explicitly cover what is being tested?
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+    rubric:
+    - score: 1
+      label: All success criteria defined
+      description: The prompt clearly defines what success looks like for all tested
+        requirements.
+      examples: []
+    - score: 0
+      label: Missing success criteria
+      description: The prompt omits success criteria that are tested.
+      examples: []
+  prompt_has_no_solution_leakage:
+    category: prompt_quality
+    description: Does the prompt avoid leaking any specific commands or logic?
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+    rubric:
+    - score: 1
+      label: No solution leakage
+      description: The prompt describes what to do without specifying how or revealing
+        implementation details.
+      examples: []
+    - score: 0
+      label: Solution details leaked
+      description: The prompt contains specific commands, implementation details,
+        or hints that reveal the solution approach.
+      examples: []
+  prompt_does_not_require_runtime_internet:
+    category: prompt_quality
+    description: Is the task solvable without internet access at runtime?
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+    rubric:
+    - score: 1
+      label: No runtime internet required
+      description: The task is fully solvable offline without downloading files or
+        accessing APIs.
+      examples: []
+    - score: 0
+      label: Requires runtime internet
+      description: The prompt requires downloading files, accessing APIs, or other
+        internet-dependent operations during solution execution.
+      examples: []
+  tests_cover_all_prompt_requirements:
+    description: Do the tests verify all success criteria in the prompt?
+    rubric:
+    - score: 1
+      label: All requirements tested
+      description: Every requirement in the prompt has corresponding test coverage.
+      examples: []
+    - score: 0
+      label: Missing test coverage
+      description: Some prompt requirements are not tested.
+      examples: []
+    category: prompt_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  tests_do_not_add_hidden_requirements:
+    description: Do the tests avoid checking things not mentioned in the prompt?
+    rubric:
+    - score: 1
+      label: No hidden requirements
+      description: Tests only validate what the prompt explicitly requires.
+      examples: []
+    - score: 0
+      label: Tests add hidden requirements
+      description: Tests require behavior, formats, or details not stated in the prompt.
+      examples: []
+    category: test_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  tests_validate_only_explicit_success_criteria:
+    description: Are the tests scoped only to stated goals?
+    rubric:
+    - score: 1
+      label: Tests properly scoped
+      description: Tests focus solely on stated success criteria.
+      examples: []
+    - score: 0
+      label: Tests out of scope
+      description: Tests check side effects, implementation details, or conditions
+        not mentioned in the prompt.
+      examples: []
+    category: test_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  tests_validate_final_state_not_method:
+    description: Do tests validate outcomes, not how the task was done?
+    rubric:
+    - score: 1
+      label: Tests validate outcomes
+      description: Tests validate outcomes (files exist, content is correct, etc.)
+        rather than implementation methods.
+      examples: []
+    - score: 0
+      label: Tests check methods
+      description: Tests check which commands were used or implementation details.
+      examples: []
+    category: test_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  tests_verify_real_correctness_not_superficial_checks:
+    description: Are tests verifying meaningful results (not just file exists, etc.)?
+    rubric:
+    - score: 1
+      label: Tests verify real correctness
+      description: Tests check content, relationships, and proper behavior.
+      examples: []
+    - score: 0
+      label: Superficial checks only
+      description: Tests only check that files exist, values are non-zero, or keywords
+        are present without validating correctness.
+      examples: []
+    category: test_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  tests_use_stable_ground_truth:
+    description: Does expected output come from safe/controlled test files?
+    rubric:
+    - score: 1
+      label: Stable ground truth
+      description: Ground truth is in the tests/ directory, safe from agent modification.
+      examples: []
+    - score: 0
+      label: Mutable ground truth
+      description: Tests compare against files in /app or other locations the agent
+        can change.
+      examples: []
+    category: test_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  tests_are_not_easily_bypassable:
+    description: Are the tests robust against hardcoding or trivial solutions?
+    rubric:
+    - score: 1
+      label: Tests require proper implementation
+      description: Tests require solving the actual problem, not shortcuts.
+      examples: []
+    - score: 0
+      label: Tests easily bypassable
+      description: Tests can be passed by creating empty files, hardcoding outputs,
+        or other trivial workarounds.
+      examples: []
+    category: test_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  tests_are_well_scoped_and_non_redundant:
+    description: Are the tests concise and free of redundancy?
+    rubric:
+    - score: 1
+      label: Well-organized tests
+      description: Tests are concise and each test has a clear purpose.
+      examples: []
+    - score: 0
+      label: Redundant tests
+      description: Tests repeat the same validations or have unnecessary overlap.
+      examples: []
+    category: test_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  dependencies_are_pinned:
+    description: Are all dependencies pinned with specific versions?
+    rubric:
+    - score: 1
+      label: All dependencies pinned
+      description: All package installations use version pins.
+      examples: []
+    - score: 0
+      label: Unpinned dependencies
+      description: Some dependencies use unpinned versions or version ranges.
+      examples: []
+    category: environment
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  dependencies_cover_all_prompt_requirements:
+    description: Are dependencies required to run the golden solution present in the
+      docker?
+    rubric:
+    - score: 1
+      label: All dependencies present
+      description: All required packages/tools are installed in the Dockerfile.
+      examples: []
+    - score: 0
+      label: Missing dependencies
+      description: The solution requires dependencies not present in the Dockerfile.
+      examples: []
+    category: prompt_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  mock_data_cover_all_cases_to_be_tested:
+    description: Do we have the required mock data to test all the success criteria
+      provided in the task description?
+    rubric:
+    - score: 1
+      label: All cases covered
+      description: All test cases have appropriate mock data.
+      examples: []
+    - score: 0
+      label: Missing mock data
+      description: Tests require data that is missing or incomplete.
+      examples: []
+    category: test_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  solution_does_not_depend_on_runtime_internet:
+    description: Does the solution run without needing the internet?
+    rubric:
+    - score: 1
+      label: Solution is offline
+      description: The solution works without internet access.
+      examples: []
+    - score: 0
+      label: Solution requires internet
+      description: The solution downloads files, calls APIs, or requires internet
+        during execution.
+      examples: []
+    category: environment
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  solution_passes_all_tests:
+    description: Does the solution pass all unit tests? (ORACLE)
+    rubric:
+    - score: 1
+      label: All tests pass
+      description: Oracle stdout shows all tests passed.
+      examples: []
+    - score: 0
+      label: Tests fail
+      description: Oracle stderr shows test failures or errors.
+      examples: []
+    category: test_quality
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  root_cause_category:
+    description: Categorization of failure cause
+    rubric:
+    - score: 0
+      label: Prompt-test mismatch
+      description: Tests require behavior not stated in the prompt or vice versa.
+      examples: []
+    - score: 1
+      label: Incomplete prompt
+      description: The prompt is missing critical information needed to solve the
+        task.
+      examples: []
+    - score: 2
+      label: Incorrect or over-scoped tests
+      description: Tests are incorrect, test the wrong thing, or are overly restrictive.
+      examples: []
+    - score: 3
+      label: Environment/dependency issue
+      description: Missing dependencies, environment misconfiguration, or setup problems.
+      examples: []
+    - score: 4
+      label: Anti-cheat weakness
+      description: Tests can be bypassed or the task has security/data leakage issues.
+      examples: []
+    - score: 5
+      label: Fair model failure
+      description: The task is correctly specified but the model failed to solve it.
+      examples: []
+    - score: 6
+      label: Other
+      description: Other reasons not covered by the above categories.
+      examples: []
+    category: root_cause
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  root_cause_summary:
+    description: Summary of what happened and why (2-4 lines)
+    rubric:
+    - score: 0
+      label: Root cause summary
+      description: 2-4 sentences explaining what the agent tried and why it didn't
+        succeed, with evidence from trajectory, logs, prompt, and tests.
+      examples: []
+    category: root_cause
+    weight: 0.05263157894736842
+    is_deciding_factor: false
+    deciding_threshold: null
+  manual_review_notes:
+    description: Free-text notes summarizing failures (excluding solution-related fields) and their impact on execution
+    rubric:
+    - score: 0
+      label: Manual review notes
+      description: Free-text summary of failures (excluding solution fields) and how they impacted execution. Empty if no failures.
+      examples: []
+    category: manual_review
+    weight: 0.0
+    is_deciding_factor: false
+    deciding_threshold: null
+  manual_review_notes_all:
+    description: Free-text notes summarizing all failures (including solution-related fields) and their impact on execution
+    rubric:
+    - score: 0
+      label: Manual review notes (all)
+      description: Free-text summary of all failures (including solution fields) and how they impacted execution. Empty if no failures.
+      examples: []
+    category: manual_review
+    weight: 0.0
+    is_deciding_factor: false
+    deciding_threshold: null
+overall_assessment:
+  description: Overall assessment configuration for Harbor Tasks evaluation
+  weighting_method: "unweighted_average"
+  compatibility_thresholds:
+    compatible: 0.8
+    needs_human_review: 0.5
+    incompatible: 0.0
+  rewrite_thresholds:
+    problem_clarity: 2
+    unit_test_validity_fp: 2
+    unit_test_validity_fn: 2
+    validity_gold_patch_alignment: 2
+    validity_problem_test_alignment: 5
+  

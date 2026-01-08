@@ -1,0 +1,99 @@
+# LLM Configuration for Harbor Tasks Verification
+# Configurable LLM provider settings
+
+# LLM Configuration
+llm:
+  # Primary model to use for evaluations
+  primary_model: "gemini-2.5-pro"
+  
+  # Fallback models (in order of preference)
+  fallback_models: []
+  
+  # Model-specific configurations
+  models:
+    gemini-2.0-flash-exp:
+      provider: "google"
+      api_key_env: "GOOGLE_API_KEY"
+      max_retries: 3
+      retry_delay: 1.0
+      timeout: 60
+      temperature: 0.1
+      max_tokens: 8192
+      litellm_model_name: "gemini/gemini-2.0-flash-exp"
+      pricing:
+        input: 0.0
+        output: 0.0
+    
+    gemini-2.5-pro:
+      provider: "google"
+      api_key_env: "GOOGLE_API_KEY"
+      max_retries: 3
+      retry_delay: 1.0
+      timeout: 60
+      temperature: 0.1
+      max_tokens: 8192
+      litellm_model_name: "gemini/gemini-2.5-pro"
+      pricing:
+        input: 0.00125
+        output: 0.005
+    
+    claude-3-5-sonnet-20241022:
+      provider: "anthropic"
+      api_key_env: "ANTHROPIC_API_KEY"
+      max_retries: 3
+      retry_delay: 1.0
+      timeout: 120
+      temperature: 0.1
+      max_tokens: 4096
+      litellm_model_name: "claude-3-5-sonnet-20241022"
+      pricing:
+        input: 0.003
+        output: 0.015
+    
+    gpt-4-turbo-preview:
+      provider: "openai"
+      api_key_env: "OPENAI_API_KEY"
+      max_retries: 5
+      retry_delay: 2.0
+      timeout: 120
+      temperature: 0.1
+      max_tokens: 4096
+      litellm_model_name: "gpt-4-turbo-preview"
+      pricing:
+        input: 0.01
+        output: 0.03
+
+# Processing configuration
+processing:
+  max_parallel_workers: 10
+  save_progress_interval: 100
+  max_valid_prs_per_repo: 1000
+  early_exit_threshold: 0.0
+
+# Storage configuration (optional)
+storage:
+  input_format: "csv"
+  output_format: "csv"
+  database_url_env: null
+  backup_enabled: true
+  backup_interval: 100
+
+# Input files configuration
+# Note: Harbor tasks load from folders, not a single data file
+# This is a placeholder - Harbor tasks use HarborInputLoader instead
+input_files:
+  data_file: "placeholder.csv"  # Not used for Harbor tasks (loaded from folders)
+
+# Output path configuration
+# Note: Harbor tasks use --output flag, but this is required by config structure
+output_path: "harbor_evaluation_results.parquet"
+
+# Prompts directory configuration
+# Directory containing prompt templates and criteria
+prompts_dir: "configs"
+
+# Logging configuration
+logging:
+  level: "INFO"
+  file: "harbor_reviewer.log"
+
